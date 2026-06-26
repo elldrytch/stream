@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Sanctum — Avatar Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0A0712;
+      --surface:   #120F1E;
+      --surface2:  #1A1630;
+      --border:    rgba(196, 151, 61, 0.2);
+      --border2:   rgba(196, 151, 61, 0.5);
+      --gold:      #C4973D;
+      --gold-dim:  #8A6A28;
+      --text:      #DDD5C0;
+      --text2:     #8A7FA0;
+      --text3:     #554E6A;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'EB Garamond', Georgia, serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(ellipse at center top, rgba(196,151,61,0.12) 0%, rgba(123,58,30,0.06) 40%, transparent 70%);
+      animation: candleFlicker 4s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes candleFlicker {
+      0%   { opacity: 0.7; transform: translateX(-50%) scaleX(1); }
+      33%  { opacity: 1;   transform: translateX(-48%) scaleX(1.03); }
+      66%  { opacity: 0.85; transform: translateX(-52%) scaleX(0.97); }
+      100% { opacity: 0.9; transform: translateX(-50%) scaleX(1.01); }
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem 4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 3rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    nav a {
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text2);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--gold); }
+    nav a.active { color: var(--gold); position: relative; }
+    nav a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0; right: 0;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    /* HEADER */
+    header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      font-style: italic;
+      color: var(--text2);
+      line-height: 1.6;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .ornament {
+      text-align: center;
+      margin: 2.5rem 0;
+      color: var(--gold-dim);
+      font-size: 18px;
+      letter-spacing: 0.5em;
+      opacity: 0.6;
+    }
+
+    .ornament::before,
+    .ornament::after {
+      content: '';
+      display: inline-block;
+      width: 60px;
+      height: 1px;
+      background: var(--border2);
+      vertical-align: middle;
+      margin: 0 1rem;
+    }
+
+    /* GALLERY GRID */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .avatar-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .avatar-card:hover {
+      border-color: var(--border2);
+      transform: translateY(-2px);
+    }
+
+    .avatar-card:hover .card-overlay {
+      opacity: 1;
+    }
+
+    .card-image-wrap {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: var(--surface2);
+    }
+
+    .card-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transition: transform 0.3s;
+    }
+
+    .avatar-card:hover .card-image-wrap img {
+      transform: scale(1.02);
+    }
+
+    /* Placeholder when no image */
+    .card-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      color: var(--text3);
+    }
+
+    .card-placeholder .placeholder-icon {
+      font-size: 32px;
+      opacity: 0.4;
+    }
+
+    .card-placeholder .placeholder-text {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.4;
+    }
+
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(196,151,61,0.08);
+      opacity: 0;
+      transition: opacity 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .view-label {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(10,7,18,0.8);
+      padding: 8px 16px;
+      border: 1px solid var(--border2);
+    }
+
+    .card-info {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .card-name {
+      font-family: 'Cinzel', serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .card-desc {
+      font-size: 14px;
+      font-style: italic;
+      color: var(--text2);
+      line-height: 1.4;
+    }
+
+    /* STATUS TAGS */
+    .card-tags {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border: 1px solid var(--border);
+      color: var(--text3);
+      border-radius: 2px;
+    }
+
+    .tag.active {
+      border-color: rgba(196,151,61,0.4);
+      color: var(--gold-dim);
+    }
+
+    .tag.retired { opacity: 0.5; }
+
+    /* LIGHTBOX */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10,7,18,0.95);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      cursor: pointer;
+    }
+
+    .lightbox.open { display: flex; }
+
+    .lightbox-inner {
+      position: relative;
+      max-width: 96vw;
+      max-height: 96vh;
+      cursor: default;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .lightbox-inner img {
+      max-width: 96vw;
+      max-height: 88vh;
+      object-fit: contain;
+      border: 1px solid var(--border2);
+    }
+
+    .lightbox-info {
+      text-align: center;
+    }
+
+    .lightbox-name {
+      font-family: 'Cinzel', serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .lightbox-desc {
+      font-size: 16px;
+      font-style: italic;
+      color: var(--text2);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: -2rem;
+      right: 0;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text3);
+      cursor: pointer;
+      background: none;
+      border: none;
+      transition: color 0.15s;
+    }
+
+    .lightbox-close:hover { color: var(--gold); }
+
+    /* HOW TO ADD IMAGES note */
+    .add-note {
+      margin-top: 3rem;
+      padding: 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      border-left: 3px solid var(--gold-dim);
+    }
+
+    .add-note h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 0.75rem;
+    }
+
+    .add-note p, .add-note li {
+      font-size: 15px;
+      color: var(--text2);
+      line-height: 1.7;
+    }
+
+    .add-note ol { padding-left: 1.25rem; }
+    .add-note code {
+      font-family: monospace;
+      font-size: 13px;
+      background: var(--surface2);
+      padding: 2px 6px;
+      border-radius: 2px;
+      color: var(--gold);
+    }
+
+    footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    footer p {
+      font-size: 14px;
+      font-style: italic;
+      color: var(--text3);
+      line-height: 1.8;
+    }
+
+    footer .sigil {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-top: 1rem;
+      opacity: 0.5;
+    }
+
+    @media (max-width: 600px) {
+      .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      body::before { animation: none; }
+      .avatar-card { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="assets.html">Assets &amp; Credits</a>
+    <a href="gallery.html" class="active">Avatar Gallery</a>
+  </nav>
+
+  <div class="container">
+    <header>
+      <div class="eyebrow">The Sanctum — Forms of the Vessel</div>
+      <h1>Avatar Gallery</h1>
+      <p class="subtitle">The many faces worn across the virtual realms. Each form is a chapter. Each chapter, a ritual.</p>
+    </header>
+
+    <div class="ornament">✦</div>
+
+    <div class="gallery-grid" id="gallery">
+
+      <div class="avatar-card" onclick="openLightbox(this)"
+           data-src="avatars/punk swimsuit.png"
+           data-name="punk swimsuit">
+        <div class="card-image-wrap">
+          <img src="avatars/punk swimsuit.png" alt="punk swimsuit">
+          <div class="card-overlay"><span class="view-label">Behold</span></div>
+        </div>
+        <div class="card-info">
+          <div class="card-name">punk swimsuit</div>
+        </div>
+      </div>
+
+      <div class="avatar-card" onclick="openLightbox(this)"
+           data-src="avatars/punk swimsuit - suit only.png"
+           data-name="punk swimsuit - suit only">
+        <div class="card-image-wrap">
+          <img src="avatars/punk swimsuit - suit only.png" alt="punk swimsuit - suit only">
+          <div class="card-overlay"><span class="view-label">Behold</span></div>
+        </div>
+        <div class="card-info">
+          <div class="card-name">punk swimsuit - suit only</div>
+        </div>
+      </div>
+
+      <div class="avatar-card" onclick="openLightbox(this)"
+           data-src="avatars/cheongsam.png"
+           data-name="cheongsam">
+        <div class="card-image-wrap">
+          <img src="avatars/cheongsam.png" alt="cheongsam">
+          <div class="card-overlay"><span class="view-label">Behold</span></div>
+        </div>
+        <div class="card-info">
+          <div class="card-name">cheongsam</div>
+        </div>
+      </div>
+
+      <div class="avatar-card" onclick="openLightbox(this)"
+           data-src="avatars/cheongsam - suit only.png"
+           data-name="cheongsam - suit only">
+        <div class="card-image-wrap">
+          <img src="avatars/cheongsam - suit only.png" alt="cheongsam - suit only">
+          <div class="card-overlay"><span class="view-label">Behold</span></div>
+        </div>
+        <div class="card-info">
+          <div class="card-name">cheongsam - suit only</div>
+        </div>
+      </div>
+
+      <div class="avatar-card" onclick="openLightbox(this)"
+           data-src="avatars/sailor swimsuit.png"
+           data-name="sailor swimsuit">
+        <div class="card-image-wrap">
+          <img src="avatars/sailor swimsuit.png" alt="sailor swimsuit">
+          <div class="card-overlay"><span class="view-label">Behold</span></div>
+        </div>
+        <div class="card-info">
+          <div class="card-name">sailor swimsuit</div>
+        </div>
+      </div>
+
+      <div class="avatar-card" onclick="openLightbox(this)"
+           data-src="avatars/valentines angel.png"
+           data-name="valentines angel">
+        <div class="card-image-wrap">
+          <img src="avatars/valentines angel.png" alt="valentines angel">
+          <div class="card-overlay"><span class="view-label">Behold</span></div>
+        </div>
+        <div class="card-info">
+          <div class="card-name">valentines angel</div>
+        </div>
+      </div>
+
+      <div class="avatar-card" onclick="openLightbox(this)"
+           data-src="avatars/latex maid.png"
+           data-name="latex maid">
+        <div class="card-image-wrap">
+          <img src="avatars/latex maid.png" alt="latex maid">
+          <div class="card-overlay"><span class="view-label">Behold</span></div>
+        </div>
+        <div class="card-info">
+          <div class="card-name">latex maid</div>
+        </div>
+      </div>
+
+      <div class="avatar-card" onclick="openLightbox(this)"
+           data-src="avatars/latex maid - short.png"
+           data-name="latex maid - short">
+        <div class="card-image-wrap">
+          <img src="avatars/latex maid - short.png" alt="latex maid - short">
+          <div class="card-overlay"><span class="view-label">Behold</span></div>
+        </div>
+        <div class="card-info">
+          <div class="card-name">latex maid - short</div>
+        </div>
+      </div>
+
+      <div class="avatar-card" onclick="openLightbox(this)"
+           data-src="avatars/succubus.png"
+           data-name="succubus">
+        <div class="card-image-wrap">
+          <img src="avatars/succubus.png" alt="succubus">
+          <div class="card-overlay"><span class="view-label">Behold</span></div>
+        </div>
+        <div class="card-info">
+          <div class="card-name">succubus</div>
+        </div>
+      </div>
+
+      <div class="avatar-card" onclick="openLightbox(this)"
+           data-src="avatars/latex reverse bunny.png"
+           data-name="latex reverse bunny">
+        <div class="card-image-wrap">
+          <img src="avatars/latex reverse bunny.png" alt="latex reverse bunny">
+          <div class="card-overlay"><span class="view-label">Behold</span></div>
+        </div>
+        <div class="card-info">
+          <div class="card-name">latex reverse bunny</div>
+        </div>
+      </div>
+
+      <div class="avatar-card" onclick="openLightbox(this)"
+           data-src="avatars/ranger - hood up.png"
+           data-name="ranger - hood up">
+        <div class="card-image-wrap">
+          <img src="avatars/ranger - hood up.png" alt="ranger - hood up">
+          <div class="card-overlay"><span class="view-label">Behold</span></div>
+        </div>
+        <div class="card-info">
+          <div class="card-name">ranger - hood up</div>
+        </div>
+      </div>
+
+      <div class="avatar-card" onclick="openLightbox(this)"
+           data-src="avatars/ranger - hood down.png"
+           data-name="ranger - hood down">
+        <div class="card-image-wrap">
+          <img src="avatars/ranger - hood down.png" alt="ranger - hood down">
+          <div class="card-overlay"><span class="view-label">Behold</span></div>
+        </div>
+        <div class="card-info">
+          <div class="card-name">ranger - hood down</div>
+        </div>
+      </div>
+
+      <div class="avatar-card" onclick="openLightbox(this)"
+           data-src="avatars/trad goth.png"
+           data-name="trad goth">
+        <div class="card-image-wrap">
+          <img src="avatars/trad goth.png" alt="trad goth">
+          <div class="card-overlay"><span class="view-label">Behold</span></div>
+        </div>
+        <div class="card-info">
+          <div class="card-name">trad goth</div>
+        </div>
+      </div>
+
+      <div class="avatar-card" onclick="openLightbox(this)"
+           data-src="avatars/trad goth - jacket off.png"
+           data-name="trad goth - jacket off">
+        <div class="card-image-wrap">
+          <img src="avatars/trad goth - jacket off.png" alt="trad goth - jacket off">
+          <div class="card-overlay"><span class="view-label">Behold</span></div>
+        </div>
+        <div class="card-info">
+          <div class="card-name">trad goth - jacket off</div>
+        </div>
+      </div>
+
+      <div class="avatar-card" onclick="openLightbox(this)"
+           data-src="avatars/ahsoka tano cosplay.png"
+           data-name="ahsoka tano cosplay">
+        <div class="card-image-wrap">
+          <img src="avatars/ahsoka tano cosplay.png" alt="ahsoka tano cosplay">
+          <div class="card-overlay"><span class="view-label">Behold</span></div>
+        </div>
+        <div class="card-info">
+          <div class="card-name">ahsoka tano cosplay</div>
+        </div>
+      </div>
+
+      <div class="avatar-card" onclick="openLightbox(this)"
+           data-src="avatars/ahsoka tano cosplay - hood down.png"
+           data-name="ahsoka tano cosplay - hood down">
+        <div class="card-image-wrap">
+          <img src="avatars/ahsoka tano cosplay - hood down.png" alt="ahsoka tano cosplay - hood down">
+          <div class="card-overlay"><span class="view-label">Behold</span></div>
+        </div>
+        <div class="card-info">
+          <div class="card-name">ahsoka tano cosplay - hood down</div>
+        </div>
+      </div>
+
+      <div class="avatar-card" onclick="openLightbox(this)"
+           data-src="avatars/ella wong cosplay.png"
+           data-name="ella wong cosplay">
+        <div class="card-image-wrap">
+          <img src="avatars/ella wong cosplay.png" alt="ella wong cosplay">
+          <div class="card-overlay"><span class="view-label">Behold</span></div>
+        </div>
+        <div class="card-info">
+          <div class="card-name">ella wong cosplay</div>
+        </div>
+      </div>
+
+     </div><!-- /gallery-grid -->
+
+    <div class="ornament">✦</div>
+
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+    <div class="lightbox-inner">
+      <button class="lightbox-close" onclick="closeLightbox()">✕ Close</button>
+      <img id="lightboxImg" src="" alt="">
+      <div class="lightbox-info">
+        <div class="lightbox-name" id="lightboxName"></div>
+        <div class="lightbox-desc" id="lightboxDesc"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openLightbox(card) {
+      const src  = card.getAttribute('data-src');
+      const name = card.getAttribute('data-name');
+      const desc = card.getAttribute('data-desc');
+      document.getElementById('lightboxImg').src  = src;
+      document.getElementById('lightboxName').textContent = name;
+      document.getElementById('lightboxDesc').textContent = desc;
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox(e) {
+      if (e && e.target !== document.getElementById('lightbox') && !e.target.classList.contains('lightbox-close')) return;
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        document.getElementById('lightbox').classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    });
+  </script>
+
+</body>
+</html>

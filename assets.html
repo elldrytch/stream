@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Sanctum — Avatar Assets & Credits</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0A0712;
+      --surface: #120F1E;
+      --surface2: #1A1630;
+      --border: rgba(196, 151, 61, 0.2);
+      --border2: rgba(196, 151, 61, 0.5);
+      --gold: #C4973D;
+      --gold-dim: #8A6A28;
+      --text: #DDD5C0;
+      --text2: #8A7FA0;
+      --text3: #554E6A;
+      --ember: #7B3A1E;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'EB Garamond', Georgia, serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Candle glow signature effect */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(ellipse at center top, rgba(196, 151, 61, 0.12) 0%, rgba(123, 58, 30, 0.06) 40%, transparent 70%);
+      animation: candleFlicker 4s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes candleFlicker {
+      0% {
+        opacity: 0.7;
+        transform: translateX(-50%) scaleX(1);
+      }
+
+      33% {
+        opacity: 1;
+        transform: translateX(-48%) scaleX(1.03);
+      }
+
+      66% {
+        opacity: 0.85;
+        transform: translateX(-52%) scaleX(0.97);
+      }
+
+      100% {
+        opacity: 0.9;
+        transform: translateX(-50%) scaleX(1.01);
+      }
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1.5rem 4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 3rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    nav a {
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text2);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: var(--gold);
+    }
+
+    nav a.active {
+      position: relative;
+    }
+
+    nav a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    /* HEADER */
+    header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      font-style: italic;
+      color: var(--text2);
+      line-height: 1.6;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* ORNAMENT DIVIDER */
+    .ornament {
+      text-align: center;
+      margin: 2.5rem 0;
+      color: var(--gold-dim);
+      font-size: 18px;
+      letter-spacing: 0.5em;
+      opacity: 0.6;
+    }
+
+    .ornament::before,
+    .ornament::after {
+      content: '';
+      display: inline-block;
+      width: 60px;
+      height: 1px;
+      background: var(--border2);
+      vertical-align: middle;
+      margin: 0 1rem;
+    }
+
+    /* CATEGORY SECTION */
+    .category {
+      margin-bottom: 3rem;
+    }
+
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .category-label {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      white-space: nowrap;
+    }
+
+    .category-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ASSET TABLE */
+    .asset-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .asset-table thead th {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text3);
+      text-align: left;
+      padding: 0 1rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .asset-table thead th:first-child {
+      padding-left: 1.25rem;
+    }
+
+    .asset-table thead th:last-child {
+      text-align: right;
+      padding-right: 1.25rem;
+    }
+
+    .asset-table tbody tr {
+      border-bottom: 1px solid rgba(196, 151, 61, 0.08);
+      transition: background 0.15s;
+    }
+
+    .asset-table tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    .asset-table tbody tr:hover {
+      background: var(--surface2);
+    }
+
+    .asset-table td {
+      padding: 0.9rem 1rem;
+      font-size: 16px;
+      vertical-align: middle;
+    }
+
+    .asset-table td:first-child {
+      padding-left: 1.25rem;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .asset-table td:last-child {
+      text-align: right;
+      padding-right: 1.25rem;
+    }
+
+    .asset-table .creator {
+      color: var(--text2);
+      font-style: italic;
+    }
+
+    .asset-table .notes {
+      font-size: 14px;
+      color: var(--text3);
+      font-style: italic;
+    }
+
+    .asset-link {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 2px;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .asset-link:hover {
+      color: var(--gold);
+      border-color: var(--border2);
+      background: rgba(196, 151, 61, 0.05);
+    }
+
+    /* CARD wrapper for table */
+    .table-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    /* FOOTER */
+    footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    footer p {
+      font-size: 14px;
+      font-style: italic;
+      color: var(--text3);
+      line-height: 1.8;
+    }
+
+    footer .sigil {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-top: 1rem;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <a href="assets.html" class="active">Assets &amp; Credits</a>
+    <a href="gallery.html">Avatar Gallery</a>
+  </nav>
+
+  <div class="container">
+    <header>
+      <div class="eyebrow">The Sanctum — Inventory of the Vessel</div>
+      <h1>Avatar Assets &amp; Credits</h1>
+      <p class="subtitle">My form was mostly conjured from the work of others. What follows is an
+        accounting of those that provided the most support. This is not an exhaustive list of my asset usage. 
+        If you feel you should be on this list please reach out to me.</p>
+    </header>
+
+    <div class="ornament">✦</div>
+
+    <!-- BODY / BASE -->
+    <div class="category">
+      <div class="category-header">
+        <span class="category-label">Body &amp; Base</span>
+        <div class="category-line"></div>
+      </div>
+      <div class="table-card">
+        <table class="asset-table">
+          <thead>
+            <tr>
+              <th>Asset</th>
+              <th>Creator</th>
+              <th>Notes</th>
+              <th>Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Project Venus Body v.2</td>
+              <td class="creator">Sanya Cosmos</td>
+              <td class="notes">Rescaled and edited by me</td>
+              <td><a class="asset-link" href="https://payhip.com/b/OTg1H" target="_blank">Visit →</a></td>
+            </tr>
+            <tr>
+              <td>Willa Head</td>
+              <td class="creator">Sivka</td>
+              <td class="notes">Edited by Illume and I</td>
+              <td><a class="asset-link" href="https://23mink.gumroad.com/l/WillaHead" target="_blank">Visit →</a></td>
+            </tr>
+            <tr>
+              <td>Willa Head Edit</td>
+              <td class="creator">Illume</td>
+              <td class="notes">Initial Head Edit</td>
+              <td><a class="asset-link" href="https://illumes.store/" target="_blank">Visit →</a></td>
+            </tr>
+            <tr>
+              <td>Willa Head Face-Tracking</td>
+              <td class="creator">Update Coming Soon</td>
+              <td class="notes"></td>
+              <td><a class="asset-link" href="#" target="_blank">Visit →</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Outfit Assets -->
+    <div class="category">
+      <div class="category-header">
+        <span class="category-label">Outfit Assets</span>
+        <div class="category-line"></div>
+      </div>
+      <div class="table-card">
+        <table class="asset-table">
+          <thead>
+            <tr>
+              <th>Asset</th>
+              <th>Creator</th>
+              <th>Notes</th>
+              <th>Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Clothing and Shoes</td>
+              <td class="creator">Jinxie Winks</td>
+              <td class="notes">One of my favorite asset creators</td>
+              <td><a class="asset-link" href="https://winksvr.store/" target="_blank">Visit →</a></td>
+            </tr>
+            <tr>
+              <td>Clothing</td>
+              <td class="creator">Flexuh</td>
+              <td class="notes">S-tier assets with some of the best material work and weighting I've run into</td>
+              <td><a class="asset-link" href="https://jinxxy.com/flexuh" target="_blank">Visit →</a></td>
+            </tr>
+            <tr>
+              <td>Clothing</td>
+              <td class="creator">Dinzee</td>
+              <td class="notes">Optimized and well thought-out fashion. I love Dinzee</td>
+              <td><a class="asset-link" href="https://payhip.com/Dinzee" target="_blank">Visit →</a></td>
+            </tr>            
+            <tr>
+              <td>Hair and Clothing</td>
+              <td class="creator">Saikura</td>
+              <td class="notes"></td>
+              <td><a class="asset-link" href="https://saikura.com/" target="_blank">Visit →</a></td>
+            </tr>
+            <tr>
+              <td>Hair and Clothing</td>
+              <td class="creator">Nessy</td>
+              <td class="notes"></td>
+              <td><a class="asset-link" href="https://nessy.store/" target="_blank">Visit →</a></td>
+            </tr>
+            <tr>
+              <td>Clothing</td>
+              <td class="creator">The Thicc Witch</td>
+              <td class="notes"></td>
+              <td><a class="asset-link" href="https://therealthiccwitch.com/" target="_blank">Visit →</a></td>
+            </tr>            
+            <tr>
+              <td>Clothing</td>
+              <td class="creator">Cringy</td>
+              <td class="notes">Do Better</td>
+              <td><a class="asset-link" href="https://cringy.store/" target="_blank">Visit →</a></td>
+            </tr>            
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- VFX / SHADERS -->
+    <div class="category">
+      <div class="category-header">
+        <span class="category-label">Shaders &amp; Visual Effects</span>
+        <div class="category-line"></div>
+      </div>
+      <div class="table-card">
+        <table class="asset-table">
+          <thead>
+            <tr>
+              <th>Asset</th>
+              <th>Creator</th>
+              <th>Notes</th>
+              <th>Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Eye Shaders</td>
+              <td class="creator">n2</td>
+              <td class="notes">Cute eye shaders</td>
+              <td><a class="asset-link" href="https://n02.gumroad.com/" target="_blank">Visit →</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="ornament">✦</div>
+
+    <footer>
+      <p>If you believe your work has been omitted or incorrectly credited,<br>please reach out so the record may be
+        corrected.</p>
+      <div class="sigil">Elldrytch · The Sanctum</div>
+    </footer>
+  </div>
+
+</body>
+
+</html>
